@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!-- 加载配置文件 -->
+    <!-- <context:property-placeholder location="classpath:redis-config/*.properties" /> -->
+
+    <!-- jedis客户端单机版  id是我们随便起的名字,后面全限定名要复制对，这种方式不能配置密码，如果有密码，用下面的jedisPool配置
+    然后还有个属性 poolConfig可以配也开不配置，不配置时会有默认配置-->
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="host" value="106.54.242.90"></constructor-arg>
+        <constructor-arg name="port" value="6379"></constructor-arg>
+    </bean>
+
+    <!-- 如果要配置连接密码需要用下面这种单机配置 -->
+    <!--     <bean id="jedisPool" class="redis.clients.jedis.JedisPool" >
+            <constructor-arg name="host" value="${redis.host}"></constructor-arg>
+            <constructor-arg name="port" value="${redis.port}"></constructor-arg>
+            <constructor-arg name="password" value="${redis.password}"></constructor-arg>
+            <constructor-arg name="timeout" value="${redis.timeout}"></constructor-arg>
+            <constructor-arg name="database" value="${redis.database}"></constructor-arg>
+
+            <constructor-arg name="poolConfig" ref="jedisPoolConfig"></constructor-arg>
+        </bean> -->
+
+    <!-- 单机和集群都可能用到的配置 -->
+    <!--     <bean class="redis.clients.jedis.JedisPoolConfig" id="jedisPoolConfig">
+            <property name="maxIdle" value="${maxIdle}" />
+            <property name="maxTotal" value="${maxActive}" />
+            <property name="maxWaitMillis" value="${maxWait}" />
+            <property name="testOnBorrow" value="${testOnBorrow}" />
+            <property name="blockWhenExhausted" value="${blockWhenExhausted}" />
+        </bean>  -->
+
+    <!-- 单机redisClient实现类 -->
+    <bean id="jedisClientSingle" class="com.longfei.service.impl.JedisClientSingle">
+        <property name="jedisPool" ref="jedisPool" />
+    </bean>
+
+    <!-- 集群相关 -->
+    <!-- <bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">
+        多节点配置
+        <constructor-arg name="jedisClusterNode">
+            <set>
+                <bean class="redis.clients.jedis.HostAndPort">
+                    <constructor-arg index="0" value="${redis.host}"></constructor-arg>
+                    <constructor-arg index="1" value="${redis.port}"></constructor-arg>
+                </bean>
+                <bean class="redis.clients.jedis.HostAndPort">
+                    <constructor-arg index="0" value="192.168.101.3"></constructor-arg>
+                    <constructor-arg index="1" value="7002"></constructor-arg>
+                </bean>
+            </set>
+        </constructor-arg>
+
+        其他参数配置
+        <constructor-arg name="connectionTimeout" value="2000"/>
+
+        <constructor-arg name="soTimeout" value="2000"/>
+
+        <constructor-arg name="maxAttempts" value="3"/>
+
+        <constructor-arg name="password" value="${redis.password}"/>
+
+        连接池配置，可以和带密码的单机版公用一个
+        <constructor-arg name="poolConfig" ref="jedisPoolConfig"/>
+
+    </bean> -->
+
+    <!-- 集群redisClient实现类 -->
+    <!-- <bean id="jedisClientCluster" class="com.tydic.jtcrm.redis.util.JedisClientCluster">
+        <property name="jedisCluster" ref="jedisCluster" />
+    </bean> -->
+
+    <!-- 配置我们自定义的jedisClient实现类 -->
+    <!-- <bean id="jedisClient" class="com.tydic.jtcrm.redis.service.JedisClient">
+    </bean> -->
+
+</beans>
