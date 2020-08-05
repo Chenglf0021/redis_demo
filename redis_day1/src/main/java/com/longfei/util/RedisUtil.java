@@ -6,6 +6,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,6 +46,10 @@ public class RedisUtil {
         JedisCluster jedisCluster=new JedisCluster(hostAndPortSet);
         String result=jedisCluster.get("test");
         System.out.println(result);
-        jedisCluster.close();
+        try {
+            jedisCluster.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

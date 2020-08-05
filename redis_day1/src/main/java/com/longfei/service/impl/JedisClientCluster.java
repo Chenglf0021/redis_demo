@@ -5,6 +5,9 @@ import redis.clients.jedis.JedisCluster;
 
 import java.util.List;
 
+/**
+ * 集群模式下的redis实现
+ */
 public class JedisClientCluster implements JedisClient {
     private JedisCluster jedisCluster;
 

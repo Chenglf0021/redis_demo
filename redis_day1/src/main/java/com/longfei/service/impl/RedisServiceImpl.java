@@ -24,4 +24,12 @@ public class RedisServiceImpl implements RedisService {
             return result;
         }
     }
+
+    public RedisTemplate<String, String> getRedisTemplate() {
+        return redisTemplate;
+    }
+
+    public void setRedisTemplate(RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 }
